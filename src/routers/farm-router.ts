@@ -1,6 +1,6 @@
 import express from 'express';
 import { Farm } from '../models/farm';
-import { updateFarm, getFarms } from '../services/farm-service';
+import { updateFarm, getFarms, getFarmsByLocation } from '../services/farm-service';
 
 export const farmRouter = express.Router();
 
@@ -8,8 +8,10 @@ farmRouter.patch('', [async (req, res) => {
     const { body } = req;
     const farm = new Farm(0, ``, ``, 0, ``, 0)
     for (const key in farm) {
-        if (body[key] !== undefined) {
-            farm[key] = body[key];
+        if (body[key] === undefined) {
+            farm[key] = undefined;
+        } else {
+            farm[key] = body[key]
         }
     }
     const id = farm.farm_id;
@@ -20,16 +22,21 @@ farmRouter.patch('', [async (req, res) => {
         res.status(e.status).send(e.message);
     }
 }])
-async function controllerGetFarms(req, res){
-    let users = await getFarms()
-    if(users){        
-        res.json(users)
-    }else{
-        res.sendStatus(500)
+
+<<<<<<< HEAD
+farmRouter.get('', [async (req, res) => {
+    try {
+        let users = await getFarms()
+        if (users) {
+            res.json(users)
+        } else {
+            res.sendStatus(500)
+        }
+    } catch (e) {
+        res.status(e.status).send(e.message)
     }
-
-}
-
+}])
+=======
 farmRouter.get('',  controllerGetFarms)
 
 farmRouter.get('/:location', async (req,res)=>{
@@ -48,3 +55,4 @@ farmRouter.get('/:location', async (req,res)=>{
         
     }
 })
+>>>>>>> 6f2f69c4697970a84eead3251be2d59c899b22ac

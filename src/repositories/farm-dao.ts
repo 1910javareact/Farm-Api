@@ -14,11 +14,13 @@ export async function daoUpdateFarm(id: number, farm: Farm): Promise<Farm> {
                 farm[key] = tempFarm[key];
             }
         }
-        await client.query(`UPDATE dairyland.farm SET farm_id = $1, "location" = $2, farm_name = $3, 
-            farm_age = $4, agri_type = $5, revenue = $6`, [farm.farm_id, farm.location, farm.farm_name, 
-            farm.farm_age, farm.agri_type, farm.revenue]);
+        await client.query(`UPDATE dairyland.farms SET farm_id = $1, "location" = $2, farm_name = $3, 
+            farm_age = $4, agri_type = $5, revenue = $6 WHERE farm_id = $7`, [farm.farm_id, farm.location, farm.farm_name, 
+            farm.farm_age, farm.agri_type, farm.revenue, id]);
         return farm;
     } catch (e) {
+        console.log(e);
+        
         throw {
             status: 500,
             message: `Internal Server Error`
@@ -30,7 +32,7 @@ export async function daoGetAllFarms():Promise <Farm[]> {
     let client: PoolClient
     try{
         client = await connectionPool.connect()
-        let result = await client.query(`select * from diaryland.farms`)
+        let result = await client.query(`select * from dairyland.farms`)
 
         if(result.rowCount === 0){
             throw 'No Farms Exists'
@@ -47,6 +49,8 @@ export async function daoGetAllFarms():Promise <Farm[]> {
             }
         }
         else {
+            console.log(e);
+            
             throw {
                 status: 500,
                 message: 'Internal Server Error'
