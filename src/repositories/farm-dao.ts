@@ -1,6 +1,7 @@
 import { Farm } from "../models/farm";
 import { PoolClient } from "pg";
 import { connectionPool } from ".";
+import { farmDTOtoFarm, multiFarmDTOtoFarm } from "../util/Farmdto-to-farm";
 
 export async function daoUpdateFarm(id: number, farm: Farm): Promise<Farm> {
     let client: PoolClient;
@@ -22,5 +23,37 @@ export async function daoUpdateFarm(id: number, farm: Farm): Promise<Farm> {
             status: 500,
             message: `Internal Server Error`
         }
+    }
+}
+
+export async function daoGetAllFarms():Promise <Farm[]> {
+    let client: PoolClient
+    try{
+        client = await connectionPool.connect()
+        let result = await client.query(`select * from diaryland.farms`)
+
+        if(result.rowCount === 0){
+            throw 'No Farms Exists'
+        }
+        else {
+            return multiFarmDTOtoFarm(result.rows)
+        }
+    }
+    catch(e){
+        if(e == 'No Farms Exists'){
+            throw{
+                status:404,
+                message: 'No Farms Exists'
+            }
+        }
+        else {
+            throw {
+                status: 500,
+                message: 'Internal Server Error'
+            }
+        }
+    }
+    finally{
+        client && client.release()
     }
 }
