@@ -1,5 +1,5 @@
 import { connectionPool } from '.';
-import PoolClient from 'pg';
+import { PoolClient } from 'pg';
 import { Worker } from '../models/worker';
 import { multiWorkerDTOtoWorker } from '../util/workerdto-to-worker';
 
