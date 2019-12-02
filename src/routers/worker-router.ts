@@ -1,3 +1,8 @@
+import * as workerServices from '../services/worker-services';
+import express from 'express';
+
+export const workerRouter = express.Router();
+
 workerRouter.get('', 
     async (req, res) => {
     const workers = await workerServices.getAllWorkersBySalary();
