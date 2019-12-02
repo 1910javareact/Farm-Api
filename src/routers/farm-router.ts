@@ -8,8 +8,10 @@ farmRouter.patch('', [async (req, res) => {
     const { body } = req;
     const farm = new Farm(0, ``, ``, 0, ``, 0)
     for (const key in farm) {
-        if (body[key] !== undefined) {
-            farm[key] = body[key];
+        if (body[key] === undefined) {
+            farm[key] = undefined;
+        } else {
+            farm[key] = body[key]
         }
     }
     const id = farm.farm_id;
@@ -20,14 +22,16 @@ farmRouter.patch('', [async (req, res) => {
         res.status(e.status).send(e.message);
     }
 }])
-async function controllerGetFarms(req, res){
-    let users = await getFarms()
-    if(users){        
-        res.json(users)
-    }else{
-        res.sendStatus(500)
+
+farmRouter.get('', [async (req, res) => {
+    try {
+        let users = await getFarms()
+        if (users) {
+            res.json(users)
+        } else {
+            res.sendStatus(500)
+        }
+    } catch (e) {
+        res.status(e.status).send(e.message)
     }
-
-}
-
-farmRouter.get('',  controllerGetFarms)
+}])
