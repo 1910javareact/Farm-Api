@@ -31,3 +31,20 @@ async function controllerGetFarms(req, res){
 }
 
 farmRouter.get('',  controllerGetFarms)
+
+farmRouter.get('/:location', async (req,res)=>{
+    let location = +req.params.farms
+    if(isNaN(location)){
+        res.sendStatus(400).send('Location does not exist')
+    }else{
+        try{
+            let farms = await getFarmsByLocation(location)
+            res.json(farms)
+        }catch(e){
+            console.log(e);
+            
+            res.status(e.status).send(e.message)
+        }
+        
+    }
+})
