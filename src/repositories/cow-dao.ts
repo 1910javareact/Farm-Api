@@ -1,6 +1,7 @@
 import { Cow } from "../models/cow"
 import { PoolClient} from 'pg'
 import { connectionPool } from "."
+import { multiCowDTOConvertor } from "../util/cowdto-to-cow"
 
 
 
@@ -9,7 +10,7 @@ export async function daoGetAllCows(): Promise<Cow[]>{
     try {
         client = await connectionPool.connect()
         const result = await client.query('')
-        return multiCowDTOConverter(result.rows)
+        return multiCowDTOConvertor(result.rows)
     }catch(e){
         console.log(e);
         throw {
@@ -18,4 +19,5 @@ export async function daoGetAllCows(): Promise<Cow[]>{
         }
     }finally{
         client && client.release()
+    }
 }
