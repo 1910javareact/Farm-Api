@@ -9,7 +9,7 @@ export async function daoGetAllCows(): Promise<Cow[]>{
     let client: PoolClient
     try {
         client = await connectionPool.connect()
-        const result = await client.query('')
+        const result = await client.query('SELECT * FROM dairyland.cows')
         return multiCowDTOConvertor(result.rows)
     }catch(e){
         console.log(e);
