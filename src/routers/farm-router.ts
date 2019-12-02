@@ -1,6 +1,6 @@
 import express from 'express';
 import { Farm } from '../models/farm';
-import { updateFarm } from '../services/farm-service';
+import { updateFarm, getFarms } from '../services/farm-service';
 
 export const farmRouter = express.Router();
 
