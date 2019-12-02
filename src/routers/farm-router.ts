@@ -20,3 +20,14 @@ farmRouter.patch('', [async (req, res) => {
         res.status(e.status).send(e.message);
     }
 }])
+async function controllerGetFarms(req, res){
+    let users = await getFarms()
+    if(users){        
+        res.json(users)
+    }else{
+        res.sendStatus(500)
+    }
+
+}
+
+farmRouter.get('',  controllerGetFarms)
