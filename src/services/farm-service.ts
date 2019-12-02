@@ -16,3 +16,12 @@ export function getFarms(): Promise<Farm[]> {
         throw e;
     }
 }
+
+export function getFarmsByLocation(location:number):Promise<Farm> {
+    try {
+        return daoGetFarmsByLocation(location);
+    } catch (e) {
+        throw e;
+    }
+
+}

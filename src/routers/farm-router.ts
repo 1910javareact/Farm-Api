@@ -1,6 +1,6 @@
 import express from 'express';
 import { Farm } from '../models/farm';
-import { updateFarm, getFarms } from '../services/farm-service';
+import { updateFarm, getFarms, getFarmsByLocation } from '../services/farm-service';
 
 export const farmRouter = express.Router();
 
@@ -23,6 +23,7 @@ farmRouter.patch('', [async (req, res) => {
     }
 }])
 
+<<<<<<< HEAD
 farmRouter.get('', [async (req, res) => {
     try {
         let users = await getFarms()
@@ -35,3 +36,23 @@ farmRouter.get('', [async (req, res) => {
         res.status(e.status).send(e.message)
     }
 }])
+=======
+farmRouter.get('',  controllerGetFarms)
+
+farmRouter.get('/:location', async (req,res)=>{
+    let location = +req.params.farms
+    if(isNaN(location)){
+        res.sendStatus(400).send('Location does not exist')
+    }else{
+        try{
+            let farms = await getFarmsByLocation(location)
+            res.json(farms)
+        }catch(e){
+            console.log(e);
+            
+            res.status(e.status).send(e.message)
+        }
+        
+    }
+})
+>>>>>>> 6f2f69c4697970a84eead3251be2d59c899b22ac

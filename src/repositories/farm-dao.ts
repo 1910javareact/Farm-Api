@@ -61,3 +61,33 @@ export async function daoGetAllFarms():Promise <Farm[]> {
         client && client.release()
     }
 }
+
+// getting Farms by Location
+export async function daoGetFarmByLocation(location: number) {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect();
+        const result = await client.query('',
+        [location]);
+        if (result.rowCount === 0) {
+            throw 'Farms do not exist';
+        } else {
+
+            return farmDTOtoFarm(result.rows);
+        }
+    } catch (e) {
+        if (e === 'Farms do not exist') {
+            throw{
+                status: 404,
+                message: 'Cannot find the farms'
+            };
+        } else {
+            throw{
+                status: 500,
+                message: 'Internal Server Error'
+            };
+        }
+    } finally {
+        client.release();
+    }
+}
